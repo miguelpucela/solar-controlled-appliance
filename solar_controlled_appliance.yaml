@@ -1,8 +1,8 @@
 blueprint:
   name: solar-controlled-appliance
   description: "\n## solar-controlled-appliance\n\n
-    Automatic control of an electric appliance based on scheduling and solar electricity production in Home Assistant.
-    ### Funciones:\n
+    Automatic control of an electric appliance based on scheduling and solar electricity production in Home Assistant.\n\n
+    ### Functions:\n
     - Switch on and off the appliance based on a scheduled `input_boolean`.\n
     - Switch on and off the appliance based on solar electricity production and house consumption.\n
 	- Switch off the appliance when electricity is imported.\n
