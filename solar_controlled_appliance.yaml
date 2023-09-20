@@ -1,0 +1,288 @@
+blueprint:
+  name: solar-controlled-appliance
+  description: "\n## solar-controlled-appliance\n\n
+    Automatic control of an electric appliance based on scheduling and solar electricity production in Home Assistant.
+    ### Funciones:\n
+    - Switch on and off the appliance based on a scheduled `input_boolean`.\n
+    - Switch on and off the appliance based on solar electricity production and house consumption.\n
+	- Switch off the appliance when electricity is imported.\n
+	- Switch on the appliance when electricity exported is enough to feed the appliance.\n
+	- Configurable hysteresis behaviour for switching off and on.\n
+	- Possibility of switch off timer (optional).\n
+	- Holidays mode.\n
+	- Safeguard functional mode for cloudy days.\n
+    ### Changelog:\n
+    - 20/09/2023 - 1.0. First public version.\n"
+  domain: automation
+  input:
+    switch_appliance:
+      name: Appliance switch
+      description: Entity with the appliance switch.
+      selector:
+        entity:
+          domain: switch
+    active_power:
+      name: Active power
+      description: Entity with the active power of the house (positive -> exporting, negative -> importing).
+      selector:
+        entity:
+          domain: sensor
+    bool_appliance:
+      name: Appliance boolean
+      description: Entity that switch-on/off appliance through a scheduling.
+      selector:
+        entity:
+          domain: input_boolean
+    daily_on_time:
+      name: Daily On-time
+      description: Entity with the number of hours that the appliance is On during this day.
+      selector:
+        entity:
+          domain: sensor
+    bool_cloudy:
+      name: Cloudy boolean
+      description: Entity that controls the safeguard switching on for cloudy days through a scheduling.
+      selector:
+        entity:
+          domain: input_boolean
+    min_on_minutes:
+      name: Minimum daily on time
+      description: Minimum daily on time in minutes (for cloudy days).
+      selector:
+        number:
+          min: 0
+          max: 240
+          step: 30
+          unit_of_measurement: "m"
+    bool_holidays:
+      name: Holidays boolean
+      description: Entity that controls holidays mode. When holidays mode is on, appliance is never switched on.
+      selector:
+        entity:
+          domain: input_boolean
+    appliance_power:
+      name: Appliance power
+      description: Nominal appliance power Potencia nominal del aparato en watios.
+      selector:
+        number:
+          min: 0
+          max: 3000
+          step: 100
+          unit_of_measurement: "w"
+    switch_off_delay:
+      name: Switch-off hysteresis delay
+      description: Elapsed time since importing electricity until switching off appliance.
+      default: 300
+      selector:
+        number:
+          min: 0
+          max: 600
+          step: 10
+          unit_of_measurement: "s"
+    switch_on_delay:
+      name: Switch-on hysteresis delay
+      description: Elapsed time since exporting enough electricity to feed appliance until switching it on appliance.
+      default: 10
+      selector:
+        number:
+          min: 0
+          max: 600
+          step: 5
+          unit_of_measurement: "s"
+    timer_appliance:
+      name: Appliance timer
+      description: Timer initialized to the maximum time the appliance is supposed to be on daily (optional).
+      default: []
+      selector:
+        entity:
+variables:
+  switch_appliance: !input switch_appliance
+  daily_on_time: !input daily_on_time
+  min_on_minutes: !input min_on_minutes
+  timer_appliance: !input timer_appliance
+trigger_variables:
+  daily_on_time: !input daily_on_time
+  min_on_minutes: !input min_on_minutes
+trigger:
+  - platform: state
+    entity_id: !input bool_appliance
+    id: On_off
+  - platform: state
+    entity_id: !input bool_cloudy
+    to: "on"
+    id: nublado_on
+  - platform: template
+    value_template: "{{ states(daily_on_time) | float * 60 > min_on_minutes | float}}"
+    id: nublado_timeout
+  - platform: numeric_state
+    entity_id: !input active_power
+    below: 0
+    for:
+      seconds: !input switch_off_delay
+    id: Importacion_electricidad
+  - platform: numeric_state
+    entity_id: !input active_power
+    above: !input appliance_power
+    for:
+      seconds: !input switch_on_delay
+    id: Exportacion_electricidad
+  - platform: state
+    entity_id: !input timer_appliance
+    to: idle
+    id: timer
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: On_off
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'on' }}"
+                  - condition: numeric_state
+                    entity_id: 
+                      - !input active_power
+                    above: !input appliance_power
+                  - condition: state
+                    entity_id: !input bool_holidays
+                    state: "off"
+                sequence:
+                  - service: switch.turn_on
+                    data: {}
+                    target:
+                      entity_id: !input switch_appliance
+                  - if:
+                      - condition: template
+                        value_template: "{{timer_appliance|length > 0}}"
+                    then:
+                      - service: timer.start
+                        target:
+                          entity_id: !input timer_appliance
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'off' }}"
+                sequence:
+                  - service: switch.turn_off
+                    data: {}
+                    target:
+                      entity_id: !input switch_appliance
+                  - if:
+                      - condition: template
+                        value_template: "{{timer_appliance|length > 0}}"
+                    then:
+                      - service: timer.cancel
+                        target:
+                          entity_id: !input timer_appliance
+      - conditions:
+          - condition: trigger
+            id: nublado_on
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ states(daily_on_time) | float * 60 < min_on_minutes | float}}"
+                sequence:
+                  - service: switch.turn_on
+                    data: {}
+                    target:
+                      entity_id: !input switch_appliance
+              - conditions:
+                  - condition: template
+                    value_template: "{{ states(daily_on_time) | float * 60 > min_on_minutes | float}}"
+                sequence:
+                  - service: input_boolean.turn_off
+                    data: {}
+                    target:
+                      entity_id: !input bool_cloudy
+      - conditions:
+          - condition: trigger
+            id: nublado_timeout
+          - condition: state
+            entity_id: !input bool_cloudy
+            state: "on"
+        sequence:
+          - service: input_boolean.turn_off
+            data: {}
+            target:
+              entity_id: !input bool_cloudy
+          - if:
+              - condition: numeric_state
+                entity_id: !input active_power
+                below: 0
+            then:
+              - service: switch.turn_off
+                target:
+                  entity_id: !input switch_appliance
+              - if:
+                - condition: template
+                  value_template: "{{timer_appliance|length > 0}}"
+                then:
+                  - service: timer.pause
+                    target:
+                      entity_id: !input timer_appliance
+      - conditions:
+          - condition: trigger
+            id: Importacion_electricidad
+          - condition: state
+            entity_id:
+              - !input bool_cloudy
+            state: "off"
+          - condition: state
+            entity_id: 
+              - !input bool_appliance
+            state: "on"
+          - condition: state
+            entity_id: !input bool_holidays
+            state: "off"
+        sequence:
+          - service: switch.turn_off
+            data: {}
+            target:
+              entity_id: !input switch_appliance
+          - if:
+              - condition: template
+                value_template: "{{timer_appliance|length > 0}}"
+            then:
+              - service: timer.pause
+                target:
+                  entity_id: !input timer_appliance
+      - conditions:
+          - condition: trigger
+            id: Exportacion_electricidad
+          - condition: state
+            entity_id: 
+              - !input bool_appliance
+            state: "on"
+          - condition: state
+            entity_id: 
+              - !input switch_appliance
+            state: "off"
+          - condition: state
+            entity_id: !input bool_holidays
+            state: "off"
+        sequence:
+          - service: switch.turn_on
+            data: {}
+            target:
+              entity_id: !input switch_appliance
+          - if:
+              - condition: template
+                value_template: "{{timer_appliance|length > 0}}"
+            then:
+              - service: timer.start
+                target:
+                  entity_id: !input timer_appliance
+      - conditions:
+          - condition: trigger
+            id: timer
+        sequence:
+          - if:
+              - condition: template
+                value_template: "{{timer_appliance|length > 0}}"
+            then:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: !input bool_appliance
+mode: parallel
