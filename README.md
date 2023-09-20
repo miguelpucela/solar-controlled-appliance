@@ -60,7 +60,7 @@ Parameters of the blueprint (for a description go back to [Prerrequisites](https
 | **Appliance switch** | `switch_appliance` | Required | | |
 | **Active power** | `active_power` | Required | | |
 | **Appliance boolean** | `bool_appliance` | Required | | |
-| **Time On** | `daily_on_time` | Required | | Unit: hours |
+| **Daily On-Time** | `daily_on_time` | Required | | Unit: hours |
 | **Cloudy boolean** | `bool_cloudy` | Required | | |
 | **Minimum On time** | | Required | Minimum daily On time (for cloudy days) | On cloudy days, when `bool_cloudy` is on, if `daily_on_time` is lower than this value, appliance is switched on until reaching this value. When it happens, boch `bool_cloudy` and `bool_appliance` (and `switch_appliance) are set to Off. Unit: minutes. Range: 0-240 |
 | **Holidays boolean** | `bool_holidays` | Required | | |
