@@ -11,6 +11,10 @@ This blueprint allows you to control an electric appliance based on solar panels
 
 ## Installation
 
+[![Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled.](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fmiguelpucela%2Fsolar-controlled-appliance%2Fblob%2Fmain%2Fsolar_controlled_appliance.yaml)
+
+Or alternatively, copy [solar_controlled_appliance.yaml](https://github.com/miguelpucela/solar-controlled-appliance/blob/main/solar_controlled_appliance.yaml) to your `config/blueprints/automation/` folder.
+
 ## Discussion Forum
 
 You can discuss about this blueprint in Home Assistant Community.
