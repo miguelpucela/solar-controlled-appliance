@@ -43,7 +43,7 @@ Schedulings can be easily created with HACS integration
 
 Settings -> Automations and scenes -> Create automation -> Solar controlled appliance.
 
-Parameters of the blueprint (for a description go back to [Prerrequisites](#prerrequisites)):
+Parameters of the blueprint (for a description go back to [Prerrequisites](https://github.com/miguelpucela/solar-controlled-appliance#Prerrequisites)):
 
 - **Appliance switch**: `switch_appliance`. Required.
 - **Active power**: `active_power`. Required.
