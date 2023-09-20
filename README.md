@@ -5,7 +5,7 @@ Control an electric appliance based on scheduling and solar electricity producti
 
 This blueprint allows you to control an electric appliance based on solar panels production, house instant power consumpsion, and scheduling. It also adds a minimum daily on time (for cloudy days), maximum on time, and holidays mode.
 
-## Versions
+## Changelog
 
 - 1.0: Initial public release.
 
