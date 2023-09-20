@@ -1,3 +1,4 @@
+# Adapt entities names to yours
 type: vertical-stack
 cards:
   - type: entities
