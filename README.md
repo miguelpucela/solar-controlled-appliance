@@ -73,6 +73,10 @@ Parameters of the blueprint (for a description go back to [Prerrequisites](https
 | **switch-on hysteresis delay** | | Optional (default: 10 s) | When `active_power` is above _Nominal appliance power_, wait for this time to switch on appliance to avoid continuous switching | Unit: seconds |
 | **Appliance timer** | `timer_appliance` | Optional (no default) | | If not present, no timer is used |
 
+## Lovelace card
+
+You can use a Lovelace card similar to [this](https://github.com/miguelpucela/solar-controlled-appliance/blob/main/lovelace_card.yaml) for each appliance to show the behaviour of the automation.
+
 ## Footnotes
 
 - `bool_appliance` scheduling can be as simple as setting it On sunrise and Off at sunset.
