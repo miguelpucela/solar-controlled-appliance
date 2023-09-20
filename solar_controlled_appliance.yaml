@@ -34,7 +34,7 @@ blueprint:
         entity:
           domain: input_boolean
     daily_on_time:
-      name: Daily On-time
+      name: Daily On-time (hours)
       description: Entity with the number of hours that the appliance is On during this day.
       selector:
         entity:
