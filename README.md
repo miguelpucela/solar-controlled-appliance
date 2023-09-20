@@ -11,6 +11,10 @@ This blueprint allows you to control an electric appliance based on solar panels
 
 ## Installation
 
+## Discussion Forum
+
+You can discuss about this blueprint in Home Assistant Community.
+
 ## Prerrequisites
 
 You need to identity the next entities for the blueprint to work (the name is only a way to referring to it here, it can change in your HA installation):
