@@ -8,7 +8,8 @@ blueprint:
 	- Switch off the appliance when electricity is imported.\n
 	- Switch on the appliance when electricity exported is enough to feed the appliance.\n
 	- Configurable hysteresis behaviour for switching off and on.\n
-	- Possibility of switch off timer (optional).\n
+	- Minimum daily scheduled on time for cloudy days.
+	- Maximum daily on time (optional).
 	- Holidays mode.\n
 	- Safeguard functional mode for cloudy days.\n
     ### Changelog:\n
