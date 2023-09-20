@@ -65,8 +65,8 @@ Parameters of the blueprint (for a description go back to [Prerrequisites](https
 | **Minimum On time** | | Required | Minimum daily On time (for cloudy days) | On cloudy days, when `bool_cloudy` is on, if `daily_on_time` is lower than this value, appliance is switched on until reaching this value. When it happens, boch `bool_cloudy` and `bool_appliance` (and `switch_appliance) are set to Off. Unit: minutes. Range: 0-240 |
 | **Holidays boolean** | `bool_holidays` | Required | | |
 | **Nominal appliance power** | | Required | Nominal appliace power | It can be found in the appliance manual or nameplate. Unit: Watts |
-| **switch-off hysteresis time** | | Optional (default: 300 s) | When `active_power` is negative, wait for this time to switch off appliance to avoid continuous switching when active power is close to zero | Unit: seconds |
-| **switch-on hysteresis time** | | Optional (default: 10 s) | When `active_power` is above _Nominal appliance power_, wait for this time to switch on appliance to avoid continuous switching | Unit: seconds |
+| **switch-off hysteresis delay** | | Optional (default: 300 s) | When `active_power` is negative, wait for this time to switch off appliance to avoid continuous switching when active power is close to zero | Unit: seconds |
+| **switch-on hysteresis delay** | | Optional (default: 10 s) | When `active_power` is above _Nominal appliance power_, wait for this time to switch on appliance to avoid continuous switching | Unit: seconds |
 | **Appliance timer** | `timer_appliance` | Optional (no default) | | If not present, no timer is used |
 
 ## Footnotes
