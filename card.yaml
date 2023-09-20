@@ -1,0 +1,15 @@
+type: vertical-stack
+cards:
+  - type: entities
+    entities:
+      - entity: input_boolean.appliance1
+      - entity: switch.appliance1
+      - entity: sensor.daily_on_time1
+      - entity: input_boolean.holidays_appliance1
+        # Optional
+      - entity: timer.timer_appliance1
+    title: Appliance1
+    show_header_toggle: false
+  - type: history-graph
+    entities:
+      - entity: switch.appliance1
