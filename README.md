@@ -1,5 +1,5 @@
 # solar-controlled-appliance
-Control an electric appliance based on scheduling and solar electricity production
+Control an electric appliance based on scheduling and solar electricity production in Home Assistant.
 
 ## Introduction
 
@@ -13,12 +13,12 @@ This blueprint allows you to control an electric appliance based on solar panels
 
 ## Prerrequisites
 
-You need to identity the next instances for the blueprint to work:
+You need to identity the next entities for the blueprint to work:
 
 - `switch_appliance`: switch of the appliance to be controlled.
 - `active_power`: active power of your home (possitive: export, negative: import).
 
-You need to create the next instances:
+You need to create the next entities:
 
 - `bool_appliance`: `input_boolean` which is On when the appliance _may_ be switched on. It is intended to be controlled by a scheduling. The real control of the appliance is done by the blueprint. It can be On 24/7 or you can limit the hours when the appliance may be On.
 - `bool_cloudy`: `input_boolean` which is On when the appliance _must_ be switched on in case a minimum on time has not reached during the day. The Off->On is intended to be controlled by a scheduling; the On->Off is controlled by the blueprint. Usually it should be On some time after noon.
