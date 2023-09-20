@@ -106,26 +106,26 @@ trigger_variables:
 trigger:
   - platform: state
     entity_id: !input bool_appliance
-    id: On_off
+    id: on_off
   - platform: state
     entity_id: !input bool_cloudy
     to: "on"
-    id: nublado_on
+    id: cloudy_on
   - platform: template
     value_template: "{{ states(daily_on_time) | float * 60 > min_on_minutes | float}}"
-    id: nublado_timeout
+    id: cloudy_timeout
   - platform: numeric_state
     entity_id: !input active_power
     below: 0
     for:
       seconds: !input switch_off_delay
-    id: Importacion_electricidad
+    id: electricity_import
   - platform: numeric_state
     entity_id: !input active_power
     above: !input appliance_power
     for:
       seconds: !input switch_on_delay
-    id: Exportacion_electricidad
+    id: electricity_export
   - platform: state
     entity_id: !input timer_appliance
     to: idle
@@ -135,7 +135,7 @@ action:
   - choose:
       - conditions:
           - condition: trigger
-            id: On_off
+            id: on_off
         sequence:
           - choose:
               - conditions:
@@ -177,7 +177,7 @@ action:
                           entity_id: !input timer_appliance
       - conditions:
           - condition: trigger
-            id: nublado_on
+            id: cloudy_on
         sequence:
           - choose:
               - conditions:
@@ -198,7 +198,7 @@ action:
                       entity_id: !input bool_cloudy
       - conditions:
           - condition: trigger
-            id: nublado_timeout
+            id: cloudy_timeout
           - condition: state
             entity_id: !input bool_cloudy
             state: "on"
@@ -224,7 +224,7 @@ action:
                       entity_id: !input timer_appliance
       - conditions:
           - condition: trigger
-            id: Importacion_electricidad
+            id: electricity_import
           - condition: state
             entity_id:
               - !input bool_cloudy
@@ -250,7 +250,7 @@ action:
                   entity_id: !input timer_appliance
       - conditions:
           - condition: trigger
-            id: Exportacion_electricidad
+            id: electricity_export
           - condition: state
             entity_id: 
               - !input bool_appliance
