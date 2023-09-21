@@ -19,7 +19,7 @@ Or alternatively, copy [solar_controlled_appliance.yaml](https://github.com/migu
 
 You can discuss about this blueprint in Home Assistant Community.
 
-## Prerrequisites
+## Prerequisites
 
 You need to identity the next entities for the blueprint to work (the name is only a way to referring to it here, it can change in your HA installation):
 
