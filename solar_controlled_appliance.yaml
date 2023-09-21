@@ -1,7 +1,7 @@
 blueprint:
   name: solar-controlled-appliance
   description: "\n## solar-controlled-appliance\n\n
-    Automatic control of electric appliances that can be switched at any time (like boilers, heaters, pool treatment plants, …) based on scheduling and solar electricity production in Home Assistant.\n\n
+    Automatic control of an electric appliance based on scheduling and solar electricity production in Home Assistant.\n\n
     ### Functions:\n
     - Switch on and off the appliance based on a scheduled `input_boolean`.\n
     - Switch on and off the appliance based on solar electricity production and house consumption.\n
@@ -13,7 +13,8 @@ blueprint:
 	- Holidays mode.\n
 	- Safeguard functional mode for cloudy days.\n
     ### Changelog:\n
-    - 20/09/2023 - 1.0. First public version.\n"
+    - 20/09/2023 - 1.0. First public version.\n
+    - 21/09/2023 - 1.1. Check whether switch_appliance is on for trigger id electricity_import.\n"
   domain: automation
   input:
     switch_appliance:
@@ -96,6 +97,7 @@ blueprint:
       default: []
       selector:
         entity:
+          domain: timer
 variables:
   switch_appliance: !input switch_appliance
   daily_on_time: !input daily_on_time
@@ -233,6 +235,10 @@ action:
           - condition: state
             entity_id: 
               - !input bool_appliance
+            state: "on"
+          - condition: state
+            entity_id: 
+              - !input switch_appliance
             state: "on"
           - condition: state
             entity_id: !input bool_holidays
