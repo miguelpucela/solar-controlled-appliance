@@ -7,7 +7,8 @@ This blueprint allows you to control an electric appliance based on solar panels
 
 ## Changelog
 
-- 1.0: Initial public release.
+- 20/09/2023 v1.0. First public version.
+- 21/09/2023 v1.1. Check whether switch_appliance is on for trigger id electricity_import.\n"- 1.0: Initial public release.
 
 ## Installation
 
