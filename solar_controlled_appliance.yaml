@@ -14,7 +14,8 @@ blueprint:
 	- Safeguard functional mode for cloudy days.\n
     ### Changelog:\n
     - 20/09/2023 - 1.0. First public version.\n
-    - 21/09/2023 - 1.1. Check whether switch_appliance is on for trigger id electricity_import.\n"
+    - 21/09/2023 - 1.1. Check whether switch_appliance is on for trigger id electricity_import.\n
+    - 28/09/2023 - 1.2. Possibility to input binary_sensors instead of input_booleans.\n"
   domain: automation
   input:
     switch_appliance:
@@ -34,7 +35,9 @@ blueprint:
       description: Entity that switch-on/off appliance through a scheduling.
       selector:
         entity:
-          domain: input_boolean
+          domain: 
+           - input_boolean
+           - binary_sensor
     daily_on_time:
       name: Daily On-time (hours)
       description: Entity with the number of hours that the appliance is On during this day.
@@ -46,7 +49,9 @@ blueprint:
       description: Entity that controls the safeguard switching on for cloudy days through a scheduling.
       selector:
         entity:
-          domain: input_boolean
+          domain: 
+           - input_boolean
+           - binary_sensor
     min_on_minutes:
       name: Minimum daily on time
       description: Minimum daily on time in minutes (for cloudy days).
@@ -61,7 +66,9 @@ blueprint:
       description: Entity that controls holidays mode. When holidays mode is on, appliance is never switched on.
       selector:
         entity:
-          domain: input_boolean
+          domain: 
+           - input_boolean
+           - binary_sensor
     appliance_power:
       name: Appliance power
       description: Nominal appliance power Potencia nominal del aparato en watios.
