@@ -9,6 +9,8 @@ This blueprint allows you to control an electric appliance based on solar panels
 
 - 20/09/2023 v1.0. First public version.
 - 21/09/2023 v1.1. Check whether switch_appliance is on for trigger id electricity_import.\n"- 1.0: Initial public release.
+- 28/09/2023 - 1.2. Possibility to input binary_sensors instead of input_booleans.
+- 17/10/2023 - 1.3. Bug correction: cloudy didn't take into accound holiday mode.
 
 ## Installation
 
