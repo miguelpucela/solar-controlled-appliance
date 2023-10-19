@@ -15,7 +15,8 @@ blueprint:
     ### Changelog:\n
     - 20/09/2023 - 1.0. First public version.\n
     - 21/09/2023 - 1.1. Check whether switch_appliance is on for trigger id electricity_import.\n
-    - 28/09/2023 - 1.2. Possibility to input binary_sensors instead of input_booleans.\n"
+    - 28/09/2023 - 1.2. Possibility to input binary_sensors instead of input_booleans.\n
+    - 17/10/2023 - 1.3. Bug correction: cloudy didn't take into accound holiday mode."
   domain: automation
   input:
     switch_appliance:
@@ -193,6 +194,9 @@ action:
               - conditions:
                   - condition: template
                     value_template: "{{ states(daily_on_time) | float * 60 < min_on_minutes | float}}"
+                  - condition: state
+                    entity_id: !input bool_holidays
+                    state: "off"
                 sequence:
                   - service: switch.turn_on
                     data: {}
